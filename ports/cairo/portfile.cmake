@@ -1,3 +1,8 @@
+
+if(VCPKG_TARGET_IS_WINDOWS AND NOT VCPKG_TARGET_IS_MINGW)
+    set(PATCHES fix_clang-cl_build.patch)
+endif()
+
 vcpkg_from_gitlab(
     GITLAB_URL https://gitlab.freedesktop.org
     OUT_SOURCE_PATH SOURCE_PATH
@@ -9,6 +14,8 @@ vcpkg_from_gitlab(
         cairo_static_fix.patch
         disable-atomic-ops-check.patch # See https://gitlab.freedesktop.org/cairo/cairo/-/issues/554
         mingw-dllexport.patch
+        fix-static-missing-lib-msimg32.patch
+        ${PATCHES}
 )
 
 if("fontconfig" IN_LIST FEATURES)
@@ -80,4 +87,4 @@ if(VCPKG_LIBRARY_LINKAGE STREQUAL "static")
 endif()
 
 # Handle copyright
-file(INSTALL "${SOURCE_PATH}/COPYING" DESTINATION "${CURRENT_PACKAGES_DIR}/share/${PORT}" RENAME copyright)
+vcpkg_install_copyright(FILE_LIST "${SOURCE_PATH}/COPYING")

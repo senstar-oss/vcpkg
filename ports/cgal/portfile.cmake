@@ -4,8 +4,8 @@ vcpkg_buildpath_length_warning(37)
 vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
     REPO CGAL/cgal
-    REF v5.4.2
-    SHA512 6274f6938b29dabf57f68eda45b80dcb84c29d8ab3febde4b79c2dd70e0a4b7989347804418a66ffe66d63b551f68de2d890cfda56f4681996a00a813a0e9bf7
+    REF v5.5.1
+    SHA512 5d247608ca19b46cddf9971a45829848904d1645dec9edf5059b15ae3be34c5b063e4e8be2e7018f7d754e7d1b16116d51ca8bc5c609a0a813df07a16118b5ce
     HEAD_REF master
 )
 
@@ -49,15 +49,16 @@ else()
     endforeach()
 endif()
 
-file(INSTALL "${SOURCE_PATH}/Installation/LICENSE" DESTINATION "${CURRENT_PACKAGES_DIR}/share/${PORT}" RENAME copyright)
+file(REMOVE_RECURSE "${CURRENT_PACKAGES_DIR}/share/doc" "${CURRENT_PACKAGES_DIR}/share/man")
 
-file(
-    COPY
+set(LICENSES
+    "${SOURCE_PATH}/Installation/LICENSE"
         "${SOURCE_PATH}/Installation/LICENSE.BSL"
         "${SOURCE_PATH}/Installation/LICENSE.RFL"
         "${SOURCE_PATH}/Installation/LICENSE.GPL"
         "${SOURCE_PATH}/Installation/LICENSE.LGPL"
-    DESTINATION "${CURRENT_PACKAGES_DIR}/share/${PORT}"
 )
+
+vcpkg_install_copyright(FILE_LIST ${LICENSES})
 
 file(INSTALL "${CMAKE_CURRENT_LIST_DIR}/usage" DESTINATION "${CURRENT_PACKAGES_DIR}/share/${PORT}")
