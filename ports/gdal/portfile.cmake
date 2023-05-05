@@ -1,15 +1,12 @@
-vcpkg_minimum_required(VERSION 2022-10-12) # for ${VERSION}
-
 vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
     REPO OSGeo/gdal
     REF "v${VERSION}"
-    SHA512 65a4cbc14f2a972662435ebf4c3be60355f7d57da251590f75b65ded113dda2c89c4a047e3b337841cbaddcf3966c879f448c832687979017df8ab1aaddfbb88
+    SHA512 e2e01c1181ab604766119be63449239000314a3042a4a30f2b8d2794f23ec4b1d1f255699d7d723238a8b5bed25d0dcfd63c37066a03188be02c8e2f5e9b0853
     HEAD_REF master
     PATCHES
         find-link-libraries.patch
         fix-gdal-target-interfaces.patch
-        fix-find-package2.patch
         libkml.patch
 )
 # `vcpkg clean` stumbles over one subdir
@@ -91,6 +88,7 @@ vcpkg_cmake_configure(
         -DGDAL_CHECK_PACKAGE_QHULL_NAMES=Qhull
         "-DGDAL_CHECK_PACKAGE_QHULL_TARGETS=${qhull_target}"
         "-DQHULL_LIBRARY=${qhull_target}"
+        -DCMAKE_PROJECT_INCLUDE="${CMAKE_CURRENT_LIST_DIR}/cmake-project-include.cmake"
     OPTIONS_DEBUG
         -DBUILD_APPS=OFF
     MAYBE_UNUSED_VARIABLES

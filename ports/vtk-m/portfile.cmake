@@ -42,7 +42,10 @@ vcpkg_from_gitlab(GITLAB_URL "https://gitlab.kitware.com"
                   REPO vtk/vtk-m 
                   REF 902fdac6fafb6358ce88f8747d55e2c0715241f1 # v1.9.0 Upgrading will most likly brake the VTK build
                   SHA512 f83872495ed3dbcea372776c4439a7d224568d144ff602c188fae120026778b1bee681c9e9535cc693e870cbc08ca9896af2bc954935c289f6b9a24f2471a50b
-                  FILE_DISAMBIGUATOR 1)
+                  FILE_DISAMBIGUATOR 1
+                  PATCHES
+                    omp.patch
+)
 vcpkg_cmake_configure(
   SOURCE_PATH "${SOURCE_PATH}"
   OPTIONS ${OPTIONS}
@@ -54,6 +57,14 @@ vcpkg_replace_string("${CURRENT_PACKAGES_DIR}/share/vtkm/VTKmConfig.cmake"
                     [[set_and_check(VTKm_CONFIG_DIR "${PACKAGE_PREFIX_DIR}/lib/cmake/vtkm-1.9")]]
                     [[set_and_check(VTKm_CONFIG_DIR "${PACKAGE_PREFIX_DIR}/share/vtkm")]])
 vcpkg_replace_string("${CURRENT_PACKAGES_DIR}/share/vtkm/VTKmConfig.cmake" "${CURRENT_BUILDTREES_DIR}" "not/existing/buildtree")
+
+file(MAKE_DIRECTORY "${CURRENT_PACKAGES_DIR}/lib/pkgconfig")
+file(RENAME "${CURRENT_PACKAGES_DIR}/share/vtkm-1.9/vtkm.pc" "${CURRENT_PACKAGES_DIR}/lib/pkgconfig/vtkm.pc")
+if(NOT VCPKG_BUILD_TYPE)
+  file(MAKE_DIRECTORY "${CURRENT_PACKAGES_DIR}/debug/lib/pkgconfig")
+  file(RENAME "${CURRENT_PACKAGES_DIR}/debug/share/vtkm-1.9/vtkm.pc" "${CURRENT_PACKAGES_DIR}/debug/lib/pkgconfig/vtkm.pc")
+endif()
+vcpkg_fixup_pkgconfig()
 
 file(REMOVE_RECURSE "${CURRENT_PACKAGES_DIR}/debug/share")
 file(REMOVE_RECURSE "${CURRENT_PACKAGES_DIR}/debug/include")
