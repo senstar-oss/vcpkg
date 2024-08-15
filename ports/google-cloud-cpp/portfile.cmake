@@ -4,10 +4,8 @@ vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
     REPO googleapis/google-cloud-cpp
     REF "v${VERSION}"
-    SHA512 f0196fadab18164a1b1313717329063167c003279d0898ecedd18ca562c4344a4a5be302bd951fa5c95582078fe5e88a1a8debbc66db8c8dfafedfdf7a019522
+    SHA512 756606f51ccef3e27121fb1d36455f7ab79e7d7a0a2ca310a902245871b7f11a1980ed86003b6fb5b3b1452c7c377fe26e2eea885a1846a5f70e5cc95ba3d137
     HEAD_REF main
-    PATCHES
-        support_absl_cxx17.patch
 )
 
 if ("grpc-common" IN_LIST FEATURES)
@@ -48,6 +46,7 @@ vcpkg_cmake_configure(
         -DGOOGLE_CLOUD_CPP_ENABLE_CCACHE=OFF
         -DGOOGLE_CLOUD_CPP_ENABLE_EXAMPLES=OFF
         -DBUILD_TESTING=OFF
+        -DGOOGLE_CLOUD_CPP_WITH_MOCKS=OFF
 )
 
 vcpkg_cmake_install()
